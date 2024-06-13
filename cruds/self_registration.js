@@ -15,7 +15,7 @@ crudsObj.postClient = (company_name, house_number_and_street_name, surbub, city,
 };
 crudsObj.getClients = () => {
     return new Promise((resolve, reject) => {
-        pool.query('SELECT * FROM self_registration', (err, results) => {
+        pool.query('SELECT * FROM self_registration ORDER BY registration_id DESC', (err, results) => {
             if (err) {
                 return reject(err);
             }
