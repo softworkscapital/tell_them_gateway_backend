@@ -27,7 +27,8 @@ crudsObj.postUser2 = (company_id, branch_id, username, password, role, category,
             console.log(user_phone);
             console.log(email);
 
-            const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${user_phone}&sms=Hi ${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is : ${otp}`;
+            // const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${user_phone}&sms=Hi ${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is : ${otp}`;
+            const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${user_phone}&sms=${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is : ${otp}&unicode=1&clientsmsid=10001&senderid=Softwork`;
             const response = axios.get(originalUrl);
 
             return resolve({ status: '200', message: 'saving successful' });
