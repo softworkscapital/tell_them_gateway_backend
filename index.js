@@ -38,7 +38,7 @@ app.use('/topUp', topUpRouter);
 app.use('/contactgroups', contactGroupsRouter);
 app.use('/selftregistration', registrationRouter);
 app.use('/mailer', mailerRouter);
-
+  
 //SMS ENDPOINT
 app.get('/client/api/sendmessage/', async (req, res) => {
   try {
@@ -104,6 +104,22 @@ app.get('/file/:filename', (req, res) => {
 // Call the function to send the email and append it to the "Sent" folder
 app.get('/sendemail', (req, res) => {
   res.send(sendEmailAndAppend());
+});
+
+
+// Send message
+app.post('/sendSMS', (req, res) => {
+  const { dest_phone, msgbody} = req.body;
+
+  const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${dest_phone}&sms=${msgbody}&unicode=1&clientsmsid=10001&senderid=Softwork`;
+
+  axios.get(originalUrl)
+    .then(() => {
+      res.status(200).json({ status: 'success', message: 'SMS sent successfully' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
+    });
 });
 
 app.listen(process.env.APPPORT || '3003', () => {
