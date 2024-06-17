@@ -77,10 +77,10 @@ crudsObj.updateClientStatus = (registration_id, status) => {
 };
 
 //Update Status
-crudsObj.updateClientDocs = ( registration_id, pdf_file,proof_of_payment) => {
+crudsObj.updateClientDocs = ( registration_id,email, pdf_file,proof_of_payment) => {
     return new Promise((resolve, reject) => {
         pool.query(
-            'UPDATE self_registration SET signed_contract = ?, proof_of_payment = ? WHERE registration_id = ?',[ pdf_file, proof_of_payment, registration_id],(err, result) => {
+            'UPDATE self_registration SET signed_contract = ?, proof_of_payment = ? WHERE registration_id = ? AND user_email = ?',[ pdf_file, proof_of_payment, registration_id, email],(err, result) => {
                 if (err) {
                     return reject(err);
                 }

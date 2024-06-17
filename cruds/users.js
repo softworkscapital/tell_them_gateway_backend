@@ -28,7 +28,7 @@ crudsObj.postUser2 = (company_id, branch_id, username, password, role, category,
             console.log(email);
 
             // const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${user_phone}&sms=Hi ${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is : ${otp}`;
-            const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${user_phone}&sms=${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is ${otp}&unicode=1&clientsmsid=10001&senderid=Softwork`;
+            const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${user_phone}&sms=Hi ${username}! Your Tell Them Message Service account has been activated, you can proceed to login. Your first time password is ${otp}&unicode=1&clientsmsid=10001&senderid=Softwork`;
             const response = axios.get(originalUrl);
 
             return resolve({ status: '200', message: 'saving successful' });
@@ -61,6 +61,18 @@ crudsObj.getUserById = (userId) => {
 crudsObj.getUserByCred = (email, password) => {
     return new Promise((resolve, reject) => {
         pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        })
+    })
+};
+
+//Get User By Email
+crudsObj.getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        pool.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
             if (err) {
                 return reject(err);
             }
