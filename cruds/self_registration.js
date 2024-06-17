@@ -3,9 +3,9 @@ const pool = require('./poolfile');
 
 let crudsObj = {};
 
-crudsObj.postClient = (company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status) => {
+crudsObj.postClient = (company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status, natureOfCom, purpose) => {
     return new Promise((resolve, reject) => {
-        pool.query('INSERT INTO self_registration(company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, signed_contract, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status], (err, result) => {
+        pool.query('INSERT INTO self_registration(company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, signed_contract, status, nature_of_com, purpose) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status, natureOfCom, purpose], (err, result) => {
             if (err) {
                 return reject(err);
             }
