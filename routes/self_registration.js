@@ -20,8 +20,10 @@ registrationRouter.post('/', async (req, res, next) => {
         let nation_id_image = postedValues.nation_id_image;
         let pdf_file = postedValues.pdf_file;
         let status = postedValues.status;
+        let natureOfCom = postedValues.natureOfCom;
+        let purpose = postedValues.purpose;
 
-        let results = await registrationDbOperations.postClient(company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status);
+        let results = await registrationDbOperations.postClient(company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status, natureOfCom, purpose);
         res.json(results);
     } catch (e) {
         console.log(e);
@@ -80,9 +82,11 @@ registrationRouter.put('/:id', async (req, res, next) => {
         let nation_id_image = postedValues.nation_id_image;
         let pdf_file = postedValues.pdf_file;
         let status = postedValues.status;
+        let natureOfCom = postedValues.natureOfCom;
+        let purpose = postedValues.purpose;
 
         let result = await registrationDbOperations.updateClient(
-            registration_id, company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status
+            registration_id, company_name, house_number_and_street_name, surbub, city, country, phoneno1, phoneno2, company_email, payment_style, username, user_email, password, nation_id_image, pdf_file, status, natureOfCom, purpose
         );
         res.json(result);
     } catch (e) {
