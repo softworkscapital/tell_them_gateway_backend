@@ -107,15 +107,16 @@ registrationRouter.put('/updatestatus/:id', async (req, res, next) => {
     }
 });
 //Update Documents
-registrationRouter.put('/uploaddocs/:id', async (req, res, next) => {
+registrationRouter.put('/uploaddocs/:id/:email', async (req, res, next) => {
     try {
         let registration_id = req.params.id;
+        let email = req.params.email;
         let postedValues = req.body;
         let proof_of_payment = postedValues.proof_of_payment;
         let pdf_file = postedValues.pdf_file;
 
         let result = await registrationDbOperations.updateClientDocs(
-            registration_id, pdf_file,proof_of_payment
+            registration_id, email, pdf_file,proof_of_payment
         );
         res.json(result);
     } catch (e) {
@@ -123,6 +124,22 @@ registrationRouter.put('/uploaddocs/:id', async (req, res, next) => {
         res.sendStatus(500);
     }
 });
+// registrationRouter.put('/uploaddocs/:id', async (req, res, next) => {
+//     try {
+//         let registration_id = req.params.id;
+//         let postedValues = req.body;
+//         let proof_of_payment = postedValues.proof_of_payment;
+//         let pdf_file = postedValues.pdf_file;
+
+//         let result = await registrationDbOperations.updateClientDocs(
+//             registration_id, pdf_file,proof_of_payment
+//         );
+//         res.json(result);
+//     } catch (e) {
+//         console.log(e);
+//         res.sendStatus(500);
+//     }
+// });
 
 registrationRouter.delete('/:id', async (req, res, next) => {
     try {

@@ -86,11 +86,24 @@ userRouter.get('/:id', async (req, res, next) => {
     }
 });
 
+//Get User By User Credentials
 userRouter.get('/:email/:password', async (req, res, next) => {
     try {
         let email = req.params.email;
         let password = req.params.password;
         let result = await usersDbOperations.getUserByCred(email,password);
+        res.json(result);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+//Get User By User Email
+userRouter.get('/user/email/:email', async (req, res, next) => {
+    try {
+        let email = req.params.email;
+        let result = await usersDbOperations.getUserByEmail(email);
         res.json(result);
     } catch (e) {
         console.log(e);
