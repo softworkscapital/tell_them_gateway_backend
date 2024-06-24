@@ -61,6 +61,19 @@ clientRouter.get('/clientid/:email', async (req, res, next) => {
     }
 });
 
+//Get client profile id by apikey
+clientRouter.get('/api/:id/:key', async (req, res, next) => {
+    try {
+        let id = req.params.id;
+        let key = req.params.key;
+        let result = await clientDbOperations.getClientByKey(id, key);
+        res.json(result);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 clientRouter.put('/:id', async (req, res, next) => {
     try {
         let client_profile_id = req.params.id;
@@ -81,6 +94,39 @@ clientRouter.put('/:id', async (req, res, next) => {
 
         let result = await clientDbOperations.updateClient(
             client_profile_id, account_type, account_category, signed_on, name, street, surbub, city, country, phoneno1, phoneno2, email, payment_style, status
+        );
+        res.json(result);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+clientRouter.put('/configapi/:id', async (req, res, next) => {
+    try {
+        let client_profile_id = req.params.id;
+        let postedValues = req.body;
+        let apikey = postedValues.apikey;
+        let apikey_status = postedValues.apikey_status;
+
+        let result = await clientDbOperations.configApikey(
+            client_profile_id, apikey, apikey_status
+        );
+        res.json(result);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+clientRouter.put('/updateapisatus/:id', async (req, res, next) => {
+    try {
+        let client_profile_id = req.params.id;
+        let postedValues = req.body;
+        let apikey_status = postedValues.apikey_status;
+
+        let result = await clientDbOperations.updateApiStatus(
+            client_profile_id, apikey_status
         );
         res.json(result);
     } catch (e) {
