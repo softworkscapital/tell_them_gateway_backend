@@ -114,7 +114,7 @@ app.post('/sendSMS', (req, res) => {
   const { dest_phone, msgbody } = req.body;
 
   // const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${dest_phone}&sms=${msgbody}&unicode=1&clientsmsid=10001&senderid=Softwork`;
-  const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
+  const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${msgbody}&senderid=softworks`;
 
   axios.get(originalUrl)
     .then(() => {
