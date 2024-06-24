@@ -207,55 +207,55 @@ app.post('/sendSMS', (req, res) => {
 // });
 
 
-app.post('/smsendpoint', (req, res) => {
-  const { clientid, clientkey, message, recipients } = req.body;
+// app.post('/smsendpoint', (req, res) => {
+//   const { clientid, clientkey, message, recipients } = req.body;
 
-  axios
-    .get(`http://localhost:3003/clients/api/${clientid}/${clientkey}`)
-    .then((response) => {
-      const clientData = response.data;
+//   axios
+//     .get(`http://localhost:3003/clients/api/${clientid}/${clientkey}`)
+//     .then((response) => {
+//       const clientData = response.data;
 
-      if (!clientData || clientData.length === 0) {
-        return res.status(400).json({ error: 'Invalid clientid or clientkey' });
-      }
+//       if (!clientData || clientData.length === 0) {
+//         return res.status(400).json({ error: 'Invalid clientid or clientkey' });
+//       }
 
-      axios
-        .get(`http://localhost:3003/topup/lasttopup/${clientid}`)
-        .then((balanceResponse) => {
-          const balanceData = balanceResponse.data;
+//       axios
+//         .get(`http://localhost:3003/topup/lasttopup/${clientid}`)
+//         .then((balanceResponse) => {
+//           const balanceData = balanceResponse.data;
 
-          if (!balanceData || balanceData.results.length === 0) {
-            return res.status(400).json({ error: 'Could not retrieve client balance' });
-          }
+//           if (!balanceData || balanceData.results.length === 0) {
+//             return res.status(400).json({ error: 'Could not retrieve client balance' });
+//           }
 
-          const balance = balanceData.results[0].balance;
-          const totalCost = recipients.length * 0.046;
+//           const balance = balanceData.results[0].balance;
+//           const totalCost = recipients.length * 0.046;
 
-          if (balance < totalCost) {
-            return res.status(400).json({ error: 'Insufficient balance' });
-          }
+//           if (balance < totalCost) {
+//             return res.status(400).json({ error: 'Insufficient balance' });
+//           }
 
-          // Proceed with sending SMS or any other operations
-          const dest_phone = recipients.join(',');
-          const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
+//           // Proceed with sending SMS or any other operations
+//           const dest_phone = recipients.join(',');
+//           const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
 
-          axios
-            .get(originalUrl)
-            .then(() => {
-              res.status(200).json({ status: 'success', message: 'SMS sent successfully' });
-            })
-            .catch((error) => {
-              res.status(500).json({ error: error.message });
-            });
-        })
-        .catch((error) => {
-          res.status(500).json({ error: error.message });
-        });
-    })
-    .catch((error) => {
-      res.status(500).json({ error: error.message });
-    });
-});
+//           axios
+//             .get(originalUrl)
+//             .then(() => {
+//               res.status(200).json({ status: 'success', message: 'SMS sent successfully' });
+//             })
+//             .catch((error) => {
+//               res.status(500).json({ error: error.message });
+//             });
+//         })
+//         .catch((error) => {
+//           res.status(500).json({ error: error.message });
+//         });
+//     })
+//     .catch((error) => {
+//       res.status(500).json({ error: error.message });
+//     });
+// });
 
 
 const options = {
