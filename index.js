@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const https = require('https');
+// const https = require('https');
 
 const multer = require('multer');
 const axios = require('axios');
@@ -39,7 +39,7 @@ app.use('/topUp', topUpRouter);
 app.use('/contactgroups', contactGroupsRouter);
 app.use('/selftregistration', registrationRouter);
 app.use('/mailer', mailerRouter);
-  
+
 //SMS ENDPOINT
 app.get('/client/api/sendmessage/', async (req, res) => {
   try {
@@ -48,7 +48,8 @@ app.get('/client/api/sendmessage/', async (req, res) => {
     const sms = req.query.sms;
     const senderid = req.query.senderid;
 
-    const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=${apikey}&mobiles=${mobiles}&sms=${sms}&senderid=${senderid}`;
+    // const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=${apikey}&mobiles=${mobiles}&sms=${sms}&senderid=${senderid}`;
+    const originalUrl = `http://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=+263787364591&sms=Hello&senderid=softworks`;
 
     // Make a request to the original URL
     const response = await axios.get(originalUrl);
@@ -110,9 +111,10 @@ app.get('/sendemail', (req, res) => {
 
 // Send message
 app.post('/sendSMS', (req, res) => {
-  const { dest_phone, msgbody} = req.body;
+  const { dest_phone, msgbody } = req.body;
 
-  const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${dest_phone}&sms=${msgbody}&unicode=1&clientsmsid=10001&senderid=Softwork`;
+  // const originalUrl = `http://196.43.100.209:8901/teleoss/sendsms.jsp?user=Softwork&password=Soft@012&mobiles=${dest_phone}&sms=${msgbody}&unicode=1&clientsmsid=10001&senderid=Softwork`;
+  const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
 
   axios.get(originalUrl)
     .then(() => {
@@ -123,6 +125,139 @@ app.post('/sendSMS', (req, res) => {
     });
 });
 
+// app.post('/smsendpoint', (req, res) => {
+//   const { clientid, clientkey, message, recipients } = req.body;
+
+//   axios
+//     .get(`http://localhost:3003/clients/api/${clientid}/${clientkey}`)
+//     .then((response) => {
+//       const clientData = response.data;
+
+//       if (!clientData || clientData.length === 0) {
+//         return res.status(400).json({ error: 'Invalid clientid or clientkey' });
+//       }
+
+//       axios
+//         .get(`http://localhost:3003/lasttopup/${clientid}`)
+//         .then((balanceResponse) => {
+//           const balanceData = balanceResponse.data;
+
+//           if (!balanceData || balanceData.results.length === 0) {
+//             return res.status(400).json({ error: 'Could not retrieve client balance' });
+//           }
+
+//           const balance = balanceData.results[0].balance;
+//           const totalCost = recipients.length * 0.046;
+
+//           if (balance < totalCost) {
+//             return res.status(400).json({ error: 'Insufficient balance' });
+//           }
+
+//           // Proceed with sending SMS or any other operations
+//           const dest_phone = recipients.join(',');
+//           const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
+
+//           axios
+//             .get(originalUrl)
+//             .then(() => {
+//               // Prepare data for the /sentmessages endpoint
+//               const currentDate = new Date().toISOString();
+//               const postData = {
+//                 "client_profile_id": clientid,
+//                 "message_type": "SMS",
+//                 "origin_phone": "YourOriginPhone",
+//                 "arr": recipients,
+//                 "date_sent": currentDate,
+//                 "group_id": "",
+//                 "contact_grouping_id": "",
+//                 "msgbody": message,
+//                 "currency": "USD",
+//                 "exchange_rate": 1,
+//                 "credit": 0.046,
+//                 "debit": 0,
+//                 "balance": 0,
+//                 "description": "SMS sending",
+//                 "vat": 0.15,
+//                 "costIncl": 0.046
+//               };
+
+//               // Hit the /sentmessages endpoint with the data
+//               axios
+//                 .post('http://localhost:3003/sentmessages', postData, {
+//                   headers: { 'Content-Type': 'application/json' },
+//                 })
+//                 .then(() => {
+//                   res.status(200).json({ status: 'success', message: 'SMS sent successfully' });
+//                 })
+//                 .catch((error) => {
+//                   res.status(500).json({ error: error.message });
+//                 });
+//             })
+//             .catch((error) => {
+//               res.status(500).json({ error: error.message });
+//             });
+//         })
+//         .catch((error) => {
+//           res.status(500).json({ error: error.message });
+//         });
+//     })
+//     .catch((error) => {
+//       res.status(500).json({ error: error.message });
+//     });
+// });
+
+
+app.post('/smsendpoint', (req, res) => {
+  const { clientid, clientkey, message, recipients } = req.body;
+
+  axios
+    .get(`http://localhost:3003/clients/api/${clientid}/${clientkey}`)
+    .then((response) => {
+      const clientData = response.data;
+
+      if (!clientData || clientData.length === 0) {
+        return res.status(400).json({ error: 'Invalid clientid or clientkey' });
+      }
+
+      axios
+        .get(`http://localhost:3003/topup/lasttopup/${clientid}`)
+        .then((balanceResponse) => {
+          const balanceData = balanceResponse.data;
+
+          if (!balanceData || balanceData.results.length === 0) {
+            return res.status(400).json({ error: 'Could not retrieve client balance' });
+          }
+
+          const balance = balanceData.results[0].balance;
+          const totalCost = recipients.length * 0.046;
+
+          if (balance < totalCost) {
+            return res.status(400).json({ error: 'Insufficient balance' });
+          }
+
+          // Proceed with sending SMS or any other operations
+          const dest_phone = recipients.join(',');
+          const originalUrl = `https://sms.vas.co.zw/client/api/sendmessage?apikey=e28bb49ae7204dfe&mobiles=${dest_phone}&sms=${message}&senderid=softworks`;
+
+          axios
+            .get(originalUrl)
+            .then(() => {
+              res.status(200).json({ status: 'success', message: 'SMS sent successfully' });
+            })
+            .catch((error) => {
+              res.status(500).json({ error: error.message });
+            });
+        })
+        .catch((error) => {
+          res.status(500).json({ error: error.message });
+        });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
+
 const options = {
   cert: fs.readFileSync('/etc/letsencrypt/live/srv547457.hstgr.cloud/fullchain.pem'),
   key: fs.readFileSync('/etc/letsencrypt/live/srv547457.hstgr.cloud/privkey.pem')
@@ -131,6 +266,8 @@ const options = {
 https.createServer(options, app).listen(process.env.APPPORT || '3003', () => {
   console.log('app is listening to port' + process.env.APPPORT);
 });
+
+
 
 // app.listen(process.env.APPPORT || '3003', () => {
 //   console.log('app is listening to port' + process.env.APPPORT);
